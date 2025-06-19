@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{% static "global/css/styles.css" %}"/>
+  <title>Sistema de cotação de moedas</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;500&display=swap');
+  </style>
+</head>
+<body>
+    <main>
+        <section class="container_principal">
+            <h1>Sistema de cotação de moedas</h1>
+            <form id="formulario_cotacao">
+                <h2>Informe as datas</h2>
+                <label for="data_inicial">Data inicial:</label>
+                <input type="date" id="data_inicial" required>
+                <label for="data_final">Data final:</label>
+                <input type="date" id="data_final" required>
+
+                <h2>Selecione as moedas:</h2>
+                <div class="moedas_container">
+                  <label><input type="checkbox" value="BRL">Real (BRL)</label>
+                  <label><input type="checkbox" value="EUR">Euro (EUR)</label>
+                  <label><input type="checkbox" value="JPY">Iene (JPY)</label>
+                </div>
+
+                <button type="submit" id="botao_enviar">Buscar</button>
+            </form>
+        </section>
+        <div id="container_grafico"></div>
+        <div id="mensagem_erro" class="mensagem_erro" style="display: none;"></div>
+    </main>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="{% static "global/js/scripts.js" %}"></script>
+</body>
+</html>
