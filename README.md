@@ -16,14 +16,15 @@ Esta aplicação permite visualizar as **cotações de moedas (BRL, EUR, JPY) em
 
 ---
 
-## 🛠 Tecnologias
+## 🚀 Tecnologias Principais
 
-- **Django 5** + Django REST (estrutura REST sem serializers)
-- **HTML5**, **CSS3**, **JavaScript Vanilla**
-- **Highcharts.js** (visualização gráfica)
-- **Banco**: SQLite (dev), MySQL (suporte)
-- **Testes**: `pytest`, `pytest-django`
-- **API externa**: [VATCOMPY](https://www.vatcomply.com/documentation)
+* **Back-end**: Django (Python)
+* **API de Cotações**: Integração com VATCOMPY usando `requests`
+* **Banco de Dados**: SQLite (desenvolvimento), com suporte a MySQL
+* **Front-end**: HTML5 + CSS3 + JavaScript
+* **Gráficos**: Highcharts.js
+* **Testes Automatizados**: pytest + pytest-django
+* **Controle de Versão**: Git + GitHub (com uso de branches `main`, `dev`, `feat/...`)
 
 ---
 
