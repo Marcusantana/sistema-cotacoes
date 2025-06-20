@@ -6,23 +6,23 @@ from .services import buscar_cotacoes
 from django.shortcuts import render
 
 
-#======= VIEW PARA ACESSAR O INDEX =======#
+# ======= VIEW PARA O INDEX =======
 def home(request):
     return render(request, 'index.html')
 
 
-#======= VIEW PARA LOGICA DE DIAS UTEIS =======#
+# ======= FUNCAOO PARA CONTAR DIAS UTEIS =======
 def contar_dias_uteis(data_inicio, data_fim):
-    dia_atual = data_inicio
     dias_uteis = 0
+    dia_atual = data_inicio
     while dia_atual <= data_fim:
-        if dia_atual.weekday() < 5:
+        if dia_atual.weekday() < 5:  
             dias_uteis += 1
         dia_atual += timedelta(days=1)
     return dias_uteis
 
 
-#======= VIEW PARA A API DAS COTACOES =======#
+# ======= API PARA BUSCAR COTACOES =======
 @require_GET
 def api_cotacoes(request):
     data_inicio = request.GET.get("data_inicial")
@@ -30,30 +30,29 @@ def api_cotacoes(request):
     moedas = request.GET.get("moedas", "")
 
     if not data_inicio or not data_fim or not moedas:
-        return JsonResponse({"erro": "Preencha todas as datas e selecione pelo menos uma moeda"}, status=400)
+        return JsonResponse({"erro": "Preencha as datas e selecione pelo menos uma moeda"}, status=400)
 
     try:
         data_inicio = datetime.strptime(data_inicio, "%Y-%m-%d").date()
         data_fim = datetime.strptime(data_fim, "%Y-%m-%d").date()
 
         if data_inicio > data_fim:
-            return JsonResponse({"erro": "A data inicial não pode ser maior que a final"}, status=400)
+            return JsonResponse({"erro": "Data inicial não pode ser maior que a final"}, status=400)
 
-        dias_uteis = contar_dias_uteis(data_inicio, data_fim)
-        if dias_uteis > 5:
-            return JsonResponse({"erro": "Só é permitido consultar até 5 dias úteis de uma vez"}, status=400)
+        if contar_dias_uteis(data_inicio, data_fim) > 5:
+            return JsonResponse({"erro": "Limite de 5 dias úteis por consulta"}, status=400)
 
         lista_moedas = [m.strip().upper() for m in moedas.split(",")]
 
-        datas = []
+        datas_uteis = []
         dia_atual = data_inicio
         while dia_atual <= data_fim:
-            if dia_atual.weekday() < 5:  # Segunda a sexta
-                datas.append(dia_atual.strftime("%Y-%m-%d"))
+            if dia_atual.weekday() < 5:
+                datas_uteis.append(dia_atual.strftime("%Y-%m-%d"))
             dia_atual += timedelta(days=1)
 
         resultado = {}
-        for data in datas:
+        for data in datas_uteis:
             cotacoes = buscar_cotacoes(data)
             resultado[data] = {moeda: cotacoes.get(moeda) for moeda in lista_moedas}
 
@@ -63,12 +62,12 @@ def api_cotacoes(request):
     #--- TRATAMENTO DE ERRO ---#
     except ValueError:
         return JsonResponse({"erro": "Formato de data inválido. Use YYYY-MM-DD"}, status=400)
-
+    
     except Exception as e:
-        return JsonResponse({"erro": f"Ocorreu um erro: {str(e)}"}, status=500)
+        return JsonResponse({"erro": f"Erro inesperado: {str(e)}"}, status=500)
 
 
-#======= VIEW PARA ACESSAR COTACOES SALVAS =======#
+# ======= API PARA BUSCAR COTACOES SALVAS NO BANCO =======
 @require_GET
 def api_cotacoes_salvas(request):
     data_inicio = request.GET.get("data_inicial")
@@ -76,39 +75,42 @@ def api_cotacoes_salvas(request):
     moedas = request.GET.get("moedas", "")
 
     if not data_inicio or not data_fim or not moedas:
-        return JsonResponse({"erro": "Preencha todas as datas e selecione pelo menos uma moeda"}, status=400)
+        return JsonResponse({"erro": "Preencha as datas e selecione pelo menos uma moeda"}, status=400)
 
     try:
         data_inicio = datetime.strptime(data_inicio, "%Y-%m-%d").date()
         data_fim = datetime.strptime(data_fim, "%Y-%m-%d").date()
 
         if data_inicio > data_fim:
-            return JsonResponse({"erro": "A data inicial não pode ser maior que a final"}, status=400)
+            return JsonResponse({"erro": "Data inicial não pode ser maior que a final"}, status=400)
 
-        dias_uteis = contar_dias_uteis(data_inicio, data_fim)
-        if dias_uteis > 5:
-            return JsonResponse({"erro": "Só é permitido consultar até 5 dias úteis de uma vez"}, status=400)
+        dias_uteis = []
+        dia_atual = data_inicio
+        while dia_atual <= data_fim:
+            if dia_atual.weekday() < 5:
+                dias_uteis.append(dia_atual)
+            dia_atual += timedelta(days=1)
+
+        if len(dias_uteis) > 5:
+            return JsonResponse({"erro": "Limite de 5 dias úteis por consulta"}, status=400)
 
         lista_moedas = [m.strip().upper() for m in moedas.split(",")]
 
-        cotacoes_queryset = Cotacao.objects.filter(
-            data__range=(data_inicio, data_fim),
-            moeda__in=lista_moedas
-        )
+        cotacoes = Cotacao.objects.filter(data__in=dias_uteis, moeda__in=lista_moedas)
 
         resultado = {}
-        for cotacao in cotacoes_queryset:
-            data_str = cotacao.data.strftime("%Y-%m-%d")
+        for cot in cotacoes:
+            data_str = cot.data.strftime("%Y-%m-%d")
             if data_str not in resultado:
                 resultado[data_str] = {}
-            resultado[data_str][cotacao.moeda] = float(cotacao.valor)
+            resultado[data_str][cot.moeda] = float(cot.valor)
 
         return JsonResponse({"cotacoes": resultado})
 
 
-    #--- TRATAMENTOS DE ERRO ---#
+    #--- TRATAMENTO DE ERRO ---#
     except ValueError:
         return JsonResponse({"erro": "Formato de data inválido. Use YYYY-MM-DD"}, status=400)
-
+    
     except Exception as e:
-        return JsonResponse({"erro": f"Ocorreu um erro: {str(e)}"}, status=500)
+        return JsonResponse({"erro": f"Erro inesperado: {str(e)}"}, status=500)
