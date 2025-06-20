@@ -71,7 +71,9 @@ O projeto contém cobertura de testes para:
 Execute com:
 
 ```bash
-pytest
+pytest cotacao/tests/tests_models.py
+pytest cotacao/tests/tests_services.py
+pytest cotacao/tests/tests_views.py
 ```
 
 ---
