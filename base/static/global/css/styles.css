@@ -1,0 +1,210 @@
+/* ======= RESET DO CSS ======= */
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: "Montserrat Alternates", sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    border: none;
+    font-family: inherit;
+}
+
+/*======= VARIAVEIS DE CORES =======*/
+:root{
+    --cor-principal: #181a20;
+    --cor-secundaria: #ffd100;
+    --cor-terciaria: #141518;
+    --cor-bordas: #9c9c9c;
+    --cor-branco: #fff;
+    --cor-erro-fonte: #ff6b6b;
+    --cor-erro-fundo: #ff6b6b1a;
+    --cor-erro-borda: #ff6b6b4d;
+}
+
+/* ======== ESTRUTURA PRINCIPAL ======= */
+body {
+    background-color: var(--cor-principal);
+    color: var(--cor-branco);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    flex-direction: column;
+}
+
+/* ======= CONTAINER ======= */
+.container_principal {
+    width: 900px;
+    padding: 2rem 3rem;
+    text-align: center;
+    border-radius: 12px;
+}
+
+/* ======= TITULOS ========= */
+.container_principal h1 {
+    font-size: 2rem;
+    color: var(--cor-branco);
+    margin-bottom: 4rem;
+    letter-spacing: 1px;
+    text-decoration: underline;
+    text-decoration-color: #ffd100;
+    text-underline-offset: 0.5rem;
+    text-decoration-thickness: 3px;
+}
+
+.container_principal h2 {
+    font-size: 1.25rem;
+    margin: 1.5rem 0 1rem;
+    color: var(--cor-branco);
+    text-align: left;
+    letter-spacing: 1px;
+}
+
+/* ======= FORMULARIO =======*/
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+form label {
+    font-weight: 400;
+    color: var(--cor-branco);
+    text-align: left;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+form input[type="date"] {
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid var(--cor-bordas);
+    border-radius: 8px;
+    width: 100%;
+    background-color: var(--cor-principal);
+    color: var(--cor-branco);
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+    color: var(--cor-branco);    
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+input[type="date"]:focus {
+    border: 1px solid var(--cor-secundaria);
+    outline: none;
+}
+
+.moedas_container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.moedas_container label, .apenas_banco {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.moedas_container label:hover {
+    background-color: var(--cor-terciaria);
+}
+
+form label input[type="checkbox"] {
+    margin-right: 0.8rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: var(--cor-secundaria);
+    cursor: pointer;
+}
+
+/* ======= BOTAO DE ENVIAR =======*/
+button[type="submit"] {
+    background-color: var(--cor-principal);
+    border: 1px solid var(--cor-bordas);
+    color: var(--cor-branco);
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button[type="submit"]:hover {
+    border: 1px solid var(--cor-secundaria);
+}
+
+/* ======= GRAFICO DAS COTACOES ======== */
+#container_grafico {
+    width: 100%;
+    max-width: 900px;
+    height: 500px;
+    background-color: var(--cor-terciaria);
+    border: 1px solid var(--cor-bordas);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+/* ======= CIRCULO DE CARREGAMENTO ========*/
+.girador {
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    border: 3px solid var(--cor-bordas);
+    border-radius: 50%;
+    border-top-color: var(--cor-branco);
+    animation: girar 1s ease-in-out infinite;
+    margin-right: 8px;
+}
+
+@keyframes girar {
+    to { transform: rotate(360deg); }
+}
+
+/* ======= MENSAGENS DE TRATAMENTO DE ERRO =======*/
+.mensagem_erro {
+    color: var(--cor-erro-fonte);
+    text-align: center;
+    padding: 20px;
+    background: var(--cor-erro-fundo);
+    border-radius: 8px;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 900px;
+    border: 1px solid var(--cor-erro-borda);
+    display: none;
+}
