@@ -17,7 +17,7 @@ Esta plataforma permite que **usuários** visualizem as **cotações de moedas (
 **Back-end** com Django para lidar com regras de negócio e chamadas à API externa ([VATCOMPY](https://www.vatcomply.com/documentation)).
 **Cotações persistidas** em banco de dados, evitando requisições repetidas.
 **Visualização com Highcharts**, oferecendo gráficos dinâmicos.
-**Validação de datas** no front-end e no back-end (máximo 5 dias úteis).
+**Validação de datas** no front-end e no back-end (máximo 5 dias úteis, excluindo finais de semana).
 **Consulta opcional ao banco de dados**, sem chamadas externas, para performance e fallback offline.
 
 ---
